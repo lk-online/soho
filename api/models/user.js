@@ -4,7 +4,6 @@ var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
   username: { type: String, required: true, maxlength: 100 },
-  selfPosts: {type: Schema.Types.ObjectId, ref: 'Post', required: true}
 });
 
 // Virtual for user's URL

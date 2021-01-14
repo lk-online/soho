@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var TagSchema = new Schema({
   name: { type: String, required: true, maxlength: 100 },
   category: { type: String, required: true, enum: ["basic", "geo", "price", "required", "optional"] },
-  geoCat: { type: String, required: true, enum: ["country", "prefecture", "city"] },
+  geoCat: { type: String, required: false, enum: ["country", "prefecture", "city"] },
 });
 
 // Virtual for tag's URL
