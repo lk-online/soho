@@ -1,11 +1,11 @@
-.geoTag, .basicTag, .priceTag, .optionalTag, .requiredTag {
+.geoTag, .basicTag, .priceTag, .optionalTag, .requiredTag, .areaTag {
     display: flex;
     flex-wrap: wrap;
     flex-basis: 100%;
     margin: 12px 8px;
 }
 
-.geoTag div, .basicTag div, .priceTag div, .optionalTag div, .requiredTag div {
+.geoTag div, .basicTag div, .priceTag div, .optionalTag div, .requiredTag div, .areaTag div {
     display: flex;
     background-color: #f5f5f5;
     padding: 2px 4px;

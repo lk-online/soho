@@ -88,7 +88,7 @@ exports.post_create_post = [
         if (err) {
           return next(err);
         }
-        res.send("all done");
+        res.send(post.url);
       });
     }
   },

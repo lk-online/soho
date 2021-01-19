@@ -1,32 +1,21 @@
 import React from "react";
 import "./NewPost.css";
 
-class NewPost extends React.Component {
+class Form extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      apiResponse: [],
-    };
     this.createTag = this.createTag.bind(this);
   }
-
-  componentDidMount() {
-    fetch("http://localhost:9000/actions/post/create")
-      .then((res) => res.json())
-      .then((res) => this.setState({ apiResponse: res }));
-
-    //.then(() => console.log(this.state.apiResponse));
-  }
-
-  createTag() {
-    let geoTag;
+  createTag(props) {
     let basicTag;
+    let geoTag;
+    let areaTag;
     let priceTag;
     let requiredTag;
     let optionalTag;
 
-    if (this.state.apiResponse.length !== 0) {
-      geoTag = this.state.apiResponse
+    if (props.props.length !== 0) {
+      geoTag = props.props
         .filter((i) => i.category === "geo")
         .map((val) => (
           <div key={val._id}>
@@ -34,7 +23,15 @@ class NewPost extends React.Component {
             <label htmlFor={val._id}>{val.name}</label>
           </div>
         ));
-      basicTag = this.state.apiResponse
+      areaTag = props.props
+        .filter((i) => i.category === "area")
+        .map((val) => (
+          <div key={val._id}>
+            <input type="checkbox" id={val._id} name="tag" value={val._id} checked={val.checked} />
+            <label htmlFor={val._id}>{val.name}</label>
+          </div>
+        ));
+      basicTag = props.props
         .filter((i) => i.category === "basic")
         .map((val) => (
           <div key={val._id}>
@@ -42,7 +39,7 @@ class NewPost extends React.Component {
             <label htmlFor={val._id}>{val.name}</label>
           </div>
         ));
-      priceTag = this.state.apiResponse
+      priceTag = props.props
         .filter((i) => i.category === "price")
         .map((val) => (
           <div key={val._id}>
@@ -50,7 +47,7 @@ class NewPost extends React.Component {
             <label htmlFor={val._id}>{val.name}</label>
           </div>
         ));
-      requiredTag = this.state.apiResponse
+      requiredTag = props.props
         .filter((i) => i.category === "required")
         .map((val) => (
           <div key={val._id}>
@@ -58,7 +55,7 @@ class NewPost extends React.Component {
             <label htmlFor={val._id}>{val.name}</label>
           </div>
         ));
-      optionalTag = this.state.apiResponse
+      optionalTag = props.props
         .filter((i) => i.category === "optional")
         .map((val) => (
           <div key={val._id}>
@@ -67,12 +64,15 @@ class NewPost extends React.Component {
           </div>
         ));
     }
-
     return (
-      <form action="http://localhost:9000/actions/post/create" method="post">
+      <form id="newPostForm" name="newPostForm" onSubmit={props.onSubmit}>
         <div className="geoTag">
           <h2>Διεύθυνση</h2>
           {geoTag}
+        </div>
+        <div className="areaTag">
+          <h2>Τετραγωνικά</h2>
+          {areaTag}
         </div>
         <div className="basicTag">
           <h2>Βασικά</h2>
@@ -93,13 +93,51 @@ class NewPost extends React.Component {
         <div>
           <input type="hidden" id="user" name="user" value="6002e370cebc10364c88bb6b"></input>
         </div>
-        <input type="submit" value="δημιουργία" onSubmit={this.handleSubmit}></input>
+        <input type="submit" value="δημιουργία"></input>
       </form>
     );
   }
+  render() {
+    return <div>{this.createTag(this.props)}</div>;
+  }
+}
+
+class NewPost extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      apiResponse: [],
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    fetch("http://localhost:9000/actions/post/create")
+      .then((res) => res.json())
+      .then((res) => this.setState({ apiResponse: res }))
+      .then(() => console.log(this.state.apiResponse));
+  }
+
+  handleSubmit(e) {
+    const formData = new FormData(e.target);
+
+    const params = new URLSearchParams();
+    for (let pair of formData.entries()) {
+      typeof pair[1] == "string" && params.append(pair[0], pair[1]);
+    }
+
+    fetch("http://localhost:9000/actions/post/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params.toString(),
+    }).catch((err) => {
+      console.error(err);
+    });
+    e.preventDefault();
+  }
 
   render() {
-    return <div>{this.createTag()}</div>;
+    return <Form props={this.state.apiResponse} onSubmit={this.handleSubmit} />;
   }
 }
 
