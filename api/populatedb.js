@@ -13,9 +13,9 @@ if (!userArgs[0].startsWith('mongodb')) {
 }
 */
 var async = require("async");
-var Book = require("./models/book");
-var Author = require("./models/author");
-var Genre = require("./models/genre");
+var Post = require("./models/post");
+var User = require("./models/user");
+var Tag = require("./models/tag");
 
 var mongoose = require("mongoose");
 var mongoDB = userArgs[0];
@@ -24,111 +24,188 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-var authors = [];
-var genres = [];
-var books = [];
-var bookinstances = [];
+var users = [];
+var tags = [];
+var posts = [];
 
-function authorCreate(first_name, family_name, d_birth, d_death, cb) {
-  authordetail = { first_name: first_name, family_name: family_name };
-  if (d_birth != false) authordetail.date_of_birth = d_birth;
-  if (d_death != false) authordetail.date_of_death = d_death;
+function userCreate(username, capacity, cb) {
+  userdetail = { username: username, capacity: capacity };
 
-  var author = new Author(authordetail);
+  var user = new User(userdetail);
 
-  author.save(function (err) {
+  user.save(function (err) {
     if (err) {
       cb(err, null);
       return;
     }
-    console.log("New Author: " + author);
-    authors.push(author);
-    cb(null, author);
+    console.log("New User: " + user);
+    users.push(user);
+    cb(null, user);
   });
 }
 
-function genreCreate(name, cb) {
-  var genre = new Genre({ name: name });
+function tagCreate(name, category, cb) {
+  var tag = new Tag({ name: name, category: category });
 
-  genre.save(function (err) {
+  tag.save(function (err) {
     if (err) {
       cb(err, null);
       return;
     }
-    console.log("New Genre: " + genre);
-    genres.push(genre);
-    cb(null, genre);
+    console.log("New Tag: " + tag);
+    tags.push(tag);
+    cb(null, tag);
   });
 }
 
-function bookCreate(title, summary, isbn, author, genre, cb) {
-  bookdetail = {
-    title: title,
-    summary: summary,
-    author: author,
-    isbn: isbn,
-  };
-  if (genre != false) bookdetail.genre = genre;
+function postCreate(user, tag, cb) {
+  postdetail = {};
+  if (tag != false) postdetail.tag = tag;
+  if (user != false) postdetail.user = user;
 
-  var book = new Book(bookdetail);
-  book.save(function (err) {
+  var post = new Post(postdetail);
+  post.save(function (err) {
     if (err) {
       cb(err, null);
       return;
     }
-    console.log("New Book: " + book);
-    books.push(book);
-    cb(null, book);
+    console.log("New Post: " + post);
+    posts.push(post);
+    cb(null, post);
   });
 }
 
-function bookInstanceCreate(book, imprint, due_back, status, cb) {
-  bookinstancedetail = {
-    book: book,
-    imprint: imprint,
-  };
-  if (due_back != false) bookinstancedetail.due_back = due_back;
-  if (status != false) bookinstancedetail.status = status;
-
-  var bookinstance = new BookInstance(bookinstancedetail);
-  bookinstance.save(function (err) {
-    if (err) {
-      console.log("ERROR CREATING BookInstance: " + bookinstance);
-      cb(err, null);
-      return;
-    }
-    console.log("New BookInstance: " + bookinstance);
-    bookinstances.push(bookinstance);
-    cb(null, book);
-  });
-}
-
-function createGenreAuthors(cb) {
+function createTagUsers(cb) {
   async.series(
     [
       function (callback) {
-        authorCreate("Patrick", "Rothfuss", "1973-06-06", false, callback);
+        userCreate("sunsetbeach", "επαγγελματίας", callback);
       },
       function (callback) {
-        authorCreate("Ben", "Bova", "1932-11-8", false, callback);
+        userCreate("rodeoand5th", "επαγγελματίας", callback);
       },
       function (callback) {
-        authorCreate("Isaac", "Asimov", "1920-01-02", "1992-04-06", callback);
+        userCreate("valuehomes", "επαγγελματίας", callback);
       },
       function (callback) {
-        authorCreate("Bob", "Billings", false, false, callback);
+        userCreate("centuryhouses", "επαγγελματίας", callback);
       },
       function (callback) {
-        authorCreate("Jim", "Jones", "1971-12-16", false, callback);
+        userCreate("proagents", "επαγγελματίας", callback);
       },
       function (callback) {
-        genreCreate("Fantasy", callback);
+        userCreate("lkonline", "ιδιώτης", callback);
       },
       function (callback) {
-        genreCreate("Science Fiction", callback);
+        userCreate("ero", "ιδιώτης", callback);
       },
       function (callback) {
-        genreCreate("French Poetry", callback);
+        userCreate("daisy", "ιδιώτης", callback);
+      },
+      function (callback) {
+        userCreate("joe", "ιδιώτης", callback);
+      },
+      function (callback) {
+        userCreate("lemonpie", "ιδιώτης", callback);
+      },
+      function (callback) {
+        userCreate("cheesecake", "ιδιώτης", callback);
+      },
+      function (callback) {
+        userCreate("johndoe", "ιδιώτης", callback);
+      },
+      function (callback) {
+        userCreate("janedoe", "ιδιώτης", callback);
+      },
+      function (callback) {
+        userCreate("thedude", "ιδιώτης", callback);
+      },
+      function (callback) {
+        tagCreate("Νέα Σμύρνη", "geo", callback);
+      },
+      function (callback) {
+        tagCreate("Παγκράτι", "geo", callback);
+      },
+      function (callback) {
+        tagCreate("Καλλιθέα", "geo", callback);
+      },
+      function (callback) {
+        tagCreate("Λαγονήσι", "geo", callback);
+      },
+      function (callback) {
+        tagCreate("Χαλάνδρι", "geo", callback);
+      },
+      function (callback) {
+        tagCreate("Πικέρμι", "geo", callback);
+      },
+      function (callback) {
+        tagCreate("Ραφήνα", "geo", callback);
+      },
+      function (callback) {
+        tagCreate("6ος", "basic", callback);
+      },
+      function (callback) {
+        tagCreate("1ος", "basic", callback);
+      },
+      function (callback) {
+        tagCreate("50τμ", "area", callback);
+      },
+      function (callback) {
+        tagCreate("130τμ", "area", callback);
+      },
+      function (callback) {
+        tagCreate("90τμ", "area", callback);
+      },
+      function (callback) {
+        tagCreate("280τμ", "area", callback);
+      },
+      function (callback) {
+        tagCreate("860τμ", "area", callback);
+      },
+      function (callback) {
+        tagCreate("άμεσα διαθέσιμο", "basic", callback);
+      },
+      function (callback) {
+        tagCreate("διαθέσιμο από 1/3", "basic", callback);
+      },
+      function (callback) {
+        tagCreate("€500", "price", callback);
+      },
+      function (callback) {
+        tagCreate("€300", "price", callback);
+      },
+      function (callback) {
+        tagCreate("€900", "price", callback);
+      },
+      function (callback) {
+        tagCreate("€2500", "price", callback);
+      },
+      function (callback) {
+        tagCreate("πετρέλαιο", "required", callback);
+      },
+      function (callback) {
+        tagCreate("φυσικό αέριο", "required", callback);
+      },
+      function (callback) {
+        tagCreate("πάρκινγκ πυλωτής", "optional", callback);
+      },
+      function (callback) {
+        tagCreate("κλειστό πάρκινγκ", "optional", callback);
+      },
+      function (callback) {
+        tagCreate("παρκέ", "optional", callback);
+      },
+      function (callback) {
+        tagCreate("διαμπερές", "optional", callback);
+      },
+      function (callback) {
+        tagCreate("πόρτα ασφαλείας", "optional", callback);
+      },
+      function (callback) {
+        tagCreate("τέντες", "optional", callback);
+      },
+      function (callback) {
+        tagCreate("ανακαινισμένο", "optional", callback);
       },
     ],
     // optional callback
@@ -136,146 +213,290 @@ function createGenreAuthors(cb) {
   );
 }
 
-function createBooks(cb) {
+function createPosts(cb) {
   async.parallel(
     [
       function (callback) {
-        bookCreate(
-          "The Name of the Wind (The Kingkiller Chronicle, #1)",
-          "I have stolen princesses back from sleeping barrow kings. I burned down the town of Trebon. I have spent the night with Felurian and left with both my sanity and my life. I was expelled from the University at a younger age than most people are allowed in. I tread paths by moonlight that others fear to speak of during day. I have talked to Gods, loved women, and written songs that make the minstrels weep.",
-          "9781473211896",
-          authors[0],
-          [genres[0]],
+        postCreate(
+          [users[2], users[5], users[8]],
+          [
+            tags[0],
+            tags[7],
+            tags[9],
+            tags[15],
+            tags[17],
+            tags[21],
+            tags[23],
+            tags[25],
+            tags[26],
+            tags[28],
+            tags[29],
+          ],
           callback
         );
       },
       function (callback) {
-        bookCreate(
-          "The Wise Man's Fear (The Kingkiller Chronicle, #2)",
-          "Picking up the tale of Kvothe Kingkiller once again, we follow him into exile, into political intrigue, courtship, adventure, love and magic... and further along the path that has turned Kvothe, the mightiest magician of his age, a legend in his own time, into Kote, the unassuming pub landlord.",
-          "9788401352836",
-          authors[0],
-          [genres[0]],
+        postCreate(
+          [users[1], users[2], users[4], users[5], users[6]],
+          [
+            tags[2],
+            tags[7],
+            tags[11],
+            tags[15],
+            tags[20],
+            tags[22],
+            tags[23],
+            tags[24],
+            tags[26],
+            tags[27],
+            tags[28],
+          ],
           callback
         );
       },
       function (callback) {
-        bookCreate(
-          "The Slow Regard of Silent Things (Kingkiller Chronicle)",
-          "Deep below the University, there is a dark place. Few people know of it: a broken web of ancient passageways and abandoned rooms. A young woman lives there, tucked among the sprawling tunnels of the Underthing, snug in the heart of this forgotten place.",
-          "9780756411336",
-          authors[0],
-          [genres[0]],
+        postCreate(
+          [users[9]],
+          [
+            tags[0],
+            tags[8],
+            tags[9],
+            tags[18],
+            tags[21],
+            tags[23],
+            tags[24],
+            tags[25],
+            tags[27],
+            tags[28],
+            tags[29],
+          ],
           callback
         );
       },
       function (callback) {
-        bookCreate(
-          "Apes and Angels",
-          "Humankind headed out to the stars not for conquest, nor exploration, nor even for curiosity. Humans went to the stars in a desperate crusade to save intelligent life wherever they found it. A wave of death is spreading through the Milky Way galaxy, an expanding sphere of lethal gamma ...",
-          "9780765379528",
-          authors[1],
-          [genres[1]],
+        postCreate(
+          [users[3], users[4], users[5], users[9]],
+          [
+            tags[6],
+            tags[7],
+            tags[11],
+            tags[15],
+            tags[17],
+            tags[21],
+            tags[23],
+            tags[24],
+            tags[25],
+            tags[26],
+            tags[27],
+            tags[29],
+          ],
           callback
         );
       },
       function (callback) {
-        bookCreate(
-          "Death Wave",
-          "In Ben Bova's previous novel New Earth, Jordan Kell led the first human mission beyond the solar system. They discovered the ruins of an ancient alien civilization. But one alien AI survived, and it revealed to Jordan Kell that an explosion in the black hole at the heart of the Milky Way galaxy has created a wave of deadly radiation, expanding out from the core toward Earth. Unless the human race acts to save itself, all life on Earth will be wiped out...",
-          "9780765379504",
-          authors[1],
-          [genres[1]],
+        postCreate(
+          [users[0], users[1], users[8]],
+          [
+            tags[4],
+            tags[8],
+            tags[12],
+            tags[15],
+            tags[17],
+            tags[21],
+            tags[23],
+            tags[25],
+            tags[26],
+            tags[27],
+            tags[28],
+            tags[29],
+          ],
           callback
         );
       },
       function (callback) {
-        bookCreate(
-          "Test Book 1",
-          "Summary of test book 1",
-          "ISBN111111",
-          authors[4],
-          [genres[0], genres[1]],
+        postCreate(
+          [users[1], users[4], users[8]],
+          [
+            tags[0],
+            tags[7],
+            tags[9],
+            tags[15],
+            tags[17],
+            tags[21],
+            tags[23],
+            tags[25],
+            tags[26],
+            tags[28],
+            tags[29],
+          ],
           callback
         );
       },
       function (callback) {
-        bookCreate("Test Book 2", "Summary of test book 2", "ISBN222222", authors[4], false, callback);
+        postCreate(
+          [users[1], users[4], users[5], users[6]],
+          [
+            tags[2],
+            tags[7],
+            tags[11],
+            tags[15],
+            tags[20],
+            tags[22],
+            tags[23],
+            tags[24],
+            tags[26],
+            tags[27],
+            tags[28],
+          ],
+          callback
+        );
+      },
+      function (callback) {
+        postCreate(
+          [users[9], users[8]],
+          [
+            tags[0],
+            tags[8],
+            tags[9],
+            tags[18],
+            tags[21],
+            tags[23],
+            tags[24],
+            tags[25],
+            tags[27],
+            tags[28],
+            tags[29],
+          ],
+          callback
+        );
+      },
+      function (callback) {
+        postCreate(
+          [users[4], users[5], users[9]],
+          [
+            tags[6],
+            tags[7],
+            tags[11],
+            tags[15],
+            tags[17],
+            tags[21],
+            tags[23],
+            tags[24],
+            tags[25],
+            tags[26],
+            tags[27],
+            tags[29],
+          ],
+          callback
+        );
+      },
+      function (callback) {
+        postCreate(
+          [users[0]],
+          [
+            tags[4],
+            tags[8],
+            tags[12],
+            tags[15],
+            tags[17],
+            tags[21],
+            tags[23],
+            tags[25],
+            tags[26],
+            tags[27],
+            tags[28],
+            tags[29],
+          ],
+          callback
+        );
+      },
+      function (callback) {
+        postCreate(
+          [users[1], users[8]],
+          [tags[0], tags[7], tags[9], tags[15], tags[17], tags[21], tags[23], tags[25], tags[28], tags[29]],
+          callback
+        );
+      },
+      function (callback) {
+        postCreate(
+          [users[5], users[6]],
+          [tags[2], tags[7], tags[11], tags[15], tags[20], tags[22], tags[23], tags[24], tags[26], tags[27]],
+          callback
+        );
+      },
+      function (callback) {
+        postCreate(
+          [users[9], users[2]],
+          [
+            tags[0],
+            tags[8],
+            tags[9],
+            tags[18],
+            tags[21],
+            tags[23],
+            tags[24],
+            tags[25],
+            tags[27],
+            tags[28],
+            tags[29],
+          ],
+          callback
+        );
+      },
+      function (callback) {
+        postCreate(
+          [users[4], users[5], users[7]],
+          [
+            tags[6],
+            tags[7],
+            tags[11],
+            tags[15],
+            tags[17],
+            tags[21],
+            tags[23],
+            tags[24],
+            tags[25],
+            tags[26],
+            tags[27],
+            tags[29],
+          ],
+          callback
+        );
+      },
+      function (callback) {
+        postCreate(
+          [users[8]],
+          [
+            tags[4],
+            tags[8],
+            tags[12],
+            tags[15],
+            tags[17],
+            tags[21],
+            tags[23],
+            tags[25],
+            tags[26],
+            tags[27],
+            tags[28],
+            tags[29],
+          ],
+          callback
+        );
       },
     ],
     // optional callback
-    cb
-  );
-}
-
-function createBookInstances(cb) {
-  async.parallel(
-    [
-      function (callback) {
-        bookInstanceCreate(books[0], "London Gollancz, 2014.", false, "Available", callback);
-      },
-      function (callback) {
-        bookInstanceCreate(books[1], " Gollancz, 2011.", false, "Loaned", callback);
-      },
-      function (callback) {
-        bookInstanceCreate(books[2], " Gollancz, 2015.", false, false, callback);
-      },
-      function (callback) {
-        bookInstanceCreate(books[3], "New York Tom Doherty Associates, 2016.", false, "Available", callback);
-      },
-      function (callback) {
-        bookInstanceCreate(books[3], "New York Tom Doherty Associates, 2016.", false, "Available", callback);
-      },
-      function (callback) {
-        bookInstanceCreate(books[3], "New York Tom Doherty Associates, 2016.", false, "Available", callback);
-      },
-      function (callback) {
-        bookInstanceCreate(
-          books[4],
-          "New York, NY Tom Doherty Associates, LLC, 2015.",
-          false,
-          "Available",
-          callback
-        );
-      },
-      function (callback) {
-        bookInstanceCreate(
-          books[4],
-          "New York, NY Tom Doherty Associates, LLC, 2015.",
-          false,
-          "Maintenance",
-          callback
-        );
-      },
-      function (callback) {
-        bookInstanceCreate(
-          books[4],
-          "New York, NY Tom Doherty Associates, LLC, 2015.",
-          false,
-          "Loaned",
-          callback
-        );
-      },
-      function (callback) {
-        bookInstanceCreate(books[0], "Imprint XXX2", false, false, callback);
-      },
-      function (callback) {
-        bookInstanceCreate(books[1], "Imprint XXX3", false, false, callback);
-      },
-    ],
-    // Optional callback
     cb
   );
 }
 
 async.series(
-  [createGenreAuthors, createBooks, createBookInstances],
+  [createTagUsers, createPosts],
   // Optional callback
   function (err, results) {
     if (err) {
       console.log("FINAL ERR: " + err);
     } else {
-      console.log("BOOKInstances: " + bookinstances);
+      console.log("all good");
     }
     // All done, disconnect from database
     mongoose.connection.close();

@@ -1,0 +1,68 @@
+ol {
+    margin: 0;
+    padding: 0;
+}
+
+.post {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 18px 4px;
+    justify-content: flex-start;
+}
+
+.post:last-of-type {
+    margin-bottom: 85px;
+}
+
+.post-images {
+    display: flex;
+    overflow-x: scroll;
+}
+
+.post-images img {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.post li {
+    list-style: none;
+    margin: 2px;
+    background-color: #f5f5f5;
+    padding: 0px 4px;
+    font-size: 12px;
+    height: 20px;
+    align-items: center;
+    display: flex;
+    border-radius: 2px;
+    width: max-content;
+}
+
+.users {
+    display: inline-flex;
+    flex-wrap: wrap;
+    flex-basis: 100%;
+}
+
+.username {
+    font-size: 13px;
+    padding: 2px 4px;
+    color: deepskyblue;
+    font-weight: 600;
+    margin-right: 2px;
+}
+
+.user-capacity {
+    display: inline-flex;
+    font-size: 11px;
+    margin-right: 8px;
+}
+
+.geo-tags, .required-tags {
+    flex-basis: 100%;
+}
+
+.basic-tags, .required-tags, .optional-tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+}

@@ -3,14 +3,13 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var TagSchema = new Schema({
-  name: { type: String, required: true, maxlength: 100 },
-  category: { type: String, required: true, enum: ["basic", "geo", "price", "required", "optional"] },
-  geoCat: { type: String, required: false, enum: ["country", "prefecture", "city"] },
+  name: { type: String },
+  category: { type: String, required: true, enum: ["basic", "area", "geo", "price", "required", "optional"] },
 });
 
 // Virtual for tag's URL
 TagSchema.virtual("url").get(function () {
-  return "/catalog/tag/" + this._id;
+  return "/actions/tag/" + this._id;
 });
 
 //Export model
