@@ -66,3 +66,16 @@ ol {
     display: inline-flex;
     flex-wrap: wrap;
 }
+
+.state-icons {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin: 6px 8px 6px;
+}
+
+.state-icons img {
+    height: 18px;
+    margin: 0px 14px 0px 0px
+}

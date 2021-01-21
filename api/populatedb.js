@@ -45,7 +45,9 @@ function userCreate(username, capacity, cb) {
 }
 
 function tagCreate(name, category, cb) {
-  var tag = new Tag({ name: name, category: category });
+  tagdetail = { name: name, category: category };
+
+  var tag = new Tag(tagdetail);
 
   tag.save(function (err) {
     if (err) {
@@ -60,10 +62,12 @@ function tagCreate(name, category, cb) {
 
 function postCreate(user, tag, cb) {
   postdetail = {};
+
   if (tag != false) postdetail.tag = tag;
   if (user != false) postdetail.user = user;
 
   var post = new Post(postdetail);
+
   post.save(function (err) {
     if (err) {
       cb(err, null);

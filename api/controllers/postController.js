@@ -1,7 +1,7 @@
 const { body, validationResult } = require("express-validator");
 var Post = require("../models/post");
 var Tag = require("../models/tag");
-const User = require("../models/user");
+var User = require("../models/user");
 
 exports.index = function (req, res) {
   res.send("NOT IMPLEMENTED: Site Home Page");
@@ -19,6 +19,8 @@ exports.post_list = function (req, res) {
 // Display detail page for a specific post.
 exports.post_detail = function (req, res) {
   Post.findById(req.params.id)
+    .populate("tag")
+    .populate("user")
     .then((post) => res.json(post))
     .catch((err) => res.status(400).json("Error: " + err));
 };
@@ -26,7 +28,6 @@ exports.post_detail = function (req, res) {
 // Display post create form on GET.
 exports.post_create_get = function (req, res, next) {
   // Get all tags, which we can use for adding to our post.
-
   Tag.find()
     .then((tags) => res.json(tags))
     .catch((err) => res.status(400).json("Error: " + err));
@@ -88,7 +89,7 @@ exports.post_create_post = [
         if (err) {
           return next(err);
         }
-        res.send(post.url);
+        res.send(post._id);
       });
     }
   },

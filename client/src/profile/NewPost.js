@@ -1,4 +1,5 @@
 import React from "react";
+import Success from "../profile/Success";
 import "./NewPost.css";
 
 class Form extends React.Component {
@@ -91,7 +92,7 @@ class Form extends React.Component {
           {optionalTag}
         </div>
         <div>
-          <input type="hidden" id="user" name="user" value="6002e370cebc10364c88bb6b"></input>
+          <input type="hidden" id="user" name="user" value="600922218b0ad82910cbf460"></input>
         </div>
         <input type="submit" value="δημιουργία"></input>
       </form>
@@ -107,15 +108,19 @@ class NewPost extends React.Component {
     super(props);
     this.state = {
       apiResponse: [],
+      saved: false,
+      ID: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.save = this.save.bind(this);
+    this.addAnother = this.addAnother.bind(this);
   }
 
   componentDidMount() {
     fetch("http://localhost:9000/actions/post/create")
       .then((res) => res.json())
-      .then((res) => this.setState({ apiResponse: res }))
-      .then(() => console.log(this.state.apiResponse));
+      .then((res) => this.setState({ apiResponse: res, saved: false }));
+    //.then(() => console.log(this.state.apiResponse));
   }
 
   handleSubmit(e) {
@@ -130,14 +135,34 @@ class NewPost extends React.Component {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: params.toString(),
-    }).catch((err) => {
-      console.error(err);
-    });
+    })
+      .then((res) => res.json())
+      .then((res) => this.setState({ ID: res, saved: true }))
+      .catch((err) => {
+        console.error(err);
+      });
     e.preventDefault();
   }
 
+  addAnother() {
+    return this.setState({ saved: false, ID: "" });
+  }
+
+  save(props) {
+    return props ? (
+      <div className="newPostSuccess">
+        <Success props={this.state.ID} />
+        <button onClick={this.addAnother}>δημιουργία νέας</button>
+      </div>
+    ) : (
+      <div className="newPost">
+        <Form props={this.state.apiResponse} onSubmit={this.handleSubmit} />
+      </div>
+    );
+  }
+
   render() {
-    return <Form props={this.state.apiResponse} onSubmit={this.handleSubmit} />;
+    return <div>{this.save(this.state.saved)}</div>;
   }
 }
 
