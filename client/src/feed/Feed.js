@@ -1,28 +1,34 @@
 import React from "react";
 import "./Feed.css";
 
-function Icons(props) {
-  let liked;
-  const like = <img src="assets/icons/like.svg" alt="" />;
-  const nolike = <img src="assets/icons/nolike.svg" alt="" />;
-  let interest;
-  const interested = <img src="assets/icons/interested.svg " alt="" />;
-  const notinterested = <img src="assets/icons/notinterested.svg" alt="" />;
-  let history;
-  const seen = <img src="assets/icons/seen.svg" alt="" />;
-  const notseen = <img src="assets/icons/new.svg" alt="" />;
+function Icon(props) {
+  return <input type="image" src={`assets/icons/${props.icon}.svg`} alt="" onClick={props.onClick} />;
+}
 
-  props.value.like.includes(props.postID) ? (liked = like) : (liked = nolike);
-  props.value.interested.includes(props.postID) ? (interest = interested) : (interest = notinterested);
-  props.value.seen.includes(props.postID) ? (history = seen) : (history = notseen);
+class Icons extends React.Component {
+  renderIcons(props) {
+    let like;
+    let interested;
+    let seen;
 
-  return (
-    <div className="state-icons">
-      {liked}
-      {interest}
-      {history}
-    </div>
-  );
+    this.props.value.like.includes(this.props.postID) ? (like = "like") : (like = "nolike");
+    this.props.value.interested.includes(this.props.postID)
+      ? (interested = "interested")
+      : (interested = "notinterested");
+    this.props.value.seen.includes(this.props.postID) ? (seen = "seen") : (seen = "new");
+
+    return (
+      <div className="state-icons">
+        <Icon icon={like} onClick={() => this.props.onClick(this.props.postID, "like")} />
+        <Icon icon={interested} onClick={() => this.props.onClick(this.props.postID, "interested")} />
+        <Icon icon={seen} onClick={() => this.props.onClick(this.props.postID, "seen")} />
+      </div>
+    );
+  }
+
+  render() {
+    return this.renderIcons();
+  }
 }
 
 class Feed extends React.Component {
@@ -36,12 +42,12 @@ class Feed extends React.Component {
       seen: [],
     };
     this.renderFeed = this.renderFeed.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount() {
     fetch("http://localhost:9000/actions/posts")
       .then((res) => res.json())
       .then((res) => this.setState({ apiResponse: res }));
-    //.then(() => console.log(this.state.apiResponse));
 
     fetch(`http://localhost:9000/actions/user/${this.state.loggedUserID}`)
       .then((res) => res.json())
@@ -49,10 +55,41 @@ class Feed extends React.Component {
         this.setState({
           like: res.like,
           interested: res.interested,
-          seen: res.seen + res.like + res.interested,
+          seen: res.seen,
+        })
+      );
+  }
+
+  handleClick(e, icon) {
+    !this.state.like.includes(e) && icon === "like" && this.state.like.push(e);
+    !this.state.interested.includes(e) && icon === "interested" && this.state.interested.push(e);
+    !this.state.seen.includes(e) && icon === "seen" && this.state.seen.push(e);
+
+    const params = new URLSearchParams();
+
+    for (let l of this.state.like) {
+      params.append("like", l);
+    }
+    for (let i of this.state.interested) {
+      params.append("interested", i);
+    }
+    for (let s of this.state.seen) {
+      params.append("seen", s);
+    }
+
+    fetch(`http://localhost:9000/actions/user/${this.state.loggedUserID}/update`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params.toString(),
+    })
+      .then((res) =>
+        this.setState({
+          like: this.state.like.concat(Object.values(res)),
+          interested: this.state.interested.concat(Object.values(res)),
+          seen: this.state.seen.concat(Object.values(res)),
         })
       )
-      .then(() => console.log(this.state.like));
+      .catch((err) => console.error(err));
   }
 
   renderFeed() {
@@ -115,7 +152,7 @@ class Feed extends React.Component {
             <img alt="" src="assets/images/IMG_4142.JPEG" />
             <img alt="" src="assets/images/IMG_4142.JPEG" />
           </div>
-          <Icons value={this.state} postID={i._id} />
+          <Icons value={this.state} postID={i._id} onClick={this.handleClick} />
           <div className="required-tags">
             {i.tag
               .filter((t) => t.category === "required")

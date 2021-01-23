@@ -120,7 +120,6 @@ class NewPost extends React.Component {
     fetch("http://localhost:9000/actions/post/create")
       .then((res) => res.json())
       .then((res) => this.setState({ apiResponse: res, saved: false }));
-    //.then(() => console.log(this.state.apiResponse));
   }
 
   handleSubmit(e) {

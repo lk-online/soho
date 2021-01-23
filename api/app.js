@@ -13,6 +13,7 @@ var app = express();
 
 //Set up mongoose connection
 var mongoose = require("mongoose");
+mongoose.set("useFindAndModify", false); // required for findByIdAndUpdate() among others, see https://mongoosejs.com/docs/deprecations.html#findandmodify
 var mongoDB =
   "mongodb+srv://lkonline:rZ4JtvM2Wvv2mXL@cluster0.ormxd.mongodb.net/soho?retryWrites=true&w=majority";
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });

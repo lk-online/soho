@@ -38,6 +38,23 @@ exports.user_update_get = function (req, res) {
 };
 
 // Handle User update on POST.
-exports.user_update_post = function (req, res) {
-  res.send("NOT IMPLEMENTED: User update POST");
-};
+exports.user_update_post = [
+  (req, res, next) => {
+    var user = new User({
+      _id: req.params.id,
+      like: req.body.like,
+      interested: req.body.interested,
+      seen: req.body.seen,
+      // interested: typeof req.body.interested === "undefined" ? [] : req.body.interested,
+      //seen: typeof req.body.seen === "undefined" ? [] : req.body.seen,
+    });
+    User.findByIdAndUpdate(req.params.id, user, {}, function (err, theUser) {
+      if (err) {
+        return next(err);
+      }
+      // Successful
+      res.send(user);
+    });
+  },
+  //console.log(res.body);
+];
