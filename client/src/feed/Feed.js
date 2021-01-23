@@ -6,7 +6,7 @@ function Icon(props) {
 }
 
 class Icons extends React.Component {
-  renderIcons(props) {
+  renderIcons() {
     let like;
     let interested;
     let seen;
