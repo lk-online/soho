@@ -36,10 +36,11 @@ class Feed extends React.Component {
     super(props);
     this.state = {
       apiResponse: [],
-      loggedUserID: "600922218b0ad82910cbf460",
+      loggedUserID: "600e99e7126abc3228851bc2",
       like: [],
       interested: [],
       seen: [],
+      posts: [],
     };
     this.renderFeed = this.renderFeed.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -56,6 +57,7 @@ class Feed extends React.Component {
           like: res.like,
           interested: res.interested,
           seen: res.seen,
+          posts: res.posts,
         })
       );
   }
@@ -75,6 +77,9 @@ class Feed extends React.Component {
     }
     for (let s of this.state.seen) {
       params.append("seen", s);
+    }
+    for (let p of this.state.posts) {
+      params.append("posts", p);
     }
 
     fetch(`http://localhost:9000/actions/user/${this.state.loggedUserID}/update`, {

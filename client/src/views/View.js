@@ -5,33 +5,29 @@ import Profile from "../profile/Profile";
 import Post from "../post/Post";
 
 class View extends React.Component {
-  constructor(props) {
-    super(props);
-    this.renderComponent = this.renderComponent.bind(this);
-  }
-
   renderComponent(props) {
-    let component;
-    switch (props.props) {
+    let view;
+    switch (props.view) {
       case "Feed":
-        component = <Feed />;
+        view = <Feed />;
         break;
       case "Profile":
-        component = <Profile />;
+        view = <Profile />;
         break;
       case "NewPost":
-        component = <NewPost />;
+        view = <NewPost />;
         break;
       case "Post":
-        component = <Post />;
+        view = <Post />;
         break;
       default:
         break;
     }
-    return component;
+    return view;
   }
+
   render() {
-    return <div>{this.renderComponent(this.props)}</div>;
+    return this.renderComponent(this.props);
   }
 }
 

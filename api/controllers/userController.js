@@ -45,8 +45,7 @@ exports.user_update_post = [
       like: req.body.like,
       interested: req.body.interested,
       seen: req.body.seen,
-      // interested: typeof req.body.interested === "undefined" ? [] : req.body.interested,
-      //seen: typeof req.body.seen === "undefined" ? [] : req.body.seen,
+      posts: req.body.posts,
     });
     User.findByIdAndUpdate(req.params.id, user, {}, function (err, theUser) {
       if (err) {
@@ -56,5 +55,4 @@ exports.user_update_post = [
       res.send(user);
     });
   },
-  //console.log(res.body);
 ];

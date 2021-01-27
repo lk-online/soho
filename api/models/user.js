@@ -8,6 +8,7 @@ var UserSchema = new Schema({
   like: [{ type: Schema.Types.ObjectId, ref: "Post" }],
   interested: [{ type: Schema.Types.ObjectId, ref: "Post" }],
   seen: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+  posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
 });
 
 // Virtual for user's URL

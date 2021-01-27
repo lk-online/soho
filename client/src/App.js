@@ -8,24 +8,23 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      component: "Feed",
+      view: "Feed",
     };
+    // we bind handleClick in order for it to have access to App's state (parent component)
+    // otherwise we won't be able to use this.setState
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick(props) {
     switch (props) {
       case "home":
-        this.setState({ component: "Feed" });
+        this.setState({ view: "Feed" });
         break;
       case "user":
-        this.setState({ component: "Profile" });
+        this.setState({ view: "Profile" });
         break;
       case "plus":
-        this.setState({ component: "NewPost" });
-        break;
-      case "success":
-        this.setState({ component: "Feed" });
+        this.setState({ view: "NewPost" });
         break;
       default:
         break;
@@ -35,7 +34,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <View props={this.state.component} />
+        <View view={this.state.view} />
         <BtmNav onClick={this.handleClick} />
       </div>
     );

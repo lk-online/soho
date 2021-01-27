@@ -92,7 +92,7 @@ class Form extends React.Component {
           {optionalTag}
         </div>
         <div>
-          <input type="hidden" id="user" name="user" value="600922218b0ad82910cbf460"></input>
+          <input type="hidden" id="user" name="user" value="600e99e7126abc3228851bc2"></input>
         </div>
         <input type="submit" value="δημιουργία"></input>
       </form>
@@ -110,6 +110,7 @@ class NewPost extends React.Component {
       apiResponse: [],
       saved: false,
       ID: "",
+      loggedUser: [],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.save = this.save.bind(this);
@@ -120,6 +121,14 @@ class NewPost extends React.Component {
     fetch("http://localhost:9000/actions/post/create")
       .then((res) => res.json())
       .then((res) => this.setState({ apiResponse: res, saved: false }));
+
+    fetch("http://localhost:9000/actions/user/600e99e7126abc3228851bc2")
+      .then((res) => res.json())
+      .then((res) =>
+        this.setState({
+          loggedUser: res,
+        })
+      );
   }
 
   handleSubmit(e) {
@@ -136,11 +145,44 @@ class NewPost extends React.Component {
       body: params.toString(),
     })
       .then((res) => res.json())
-      .then((res) => this.setState({ ID: res, saved: true }))
+      .then((res) => {
+        this.setState({ ID: res, saved: true });
+        this.updateUserInfo(res);
+      })
       .catch((err) => {
         console.error(err);
       });
+
     e.preventDefault();
+  }
+
+  updateUserInfo(props) {
+    let updatedPosts = this.state.loggedUser.posts;
+    updatedPosts.push(props);
+
+    const params = new URLSearchParams();
+
+    for (let u of updatedPosts) {
+      params.append("posts", u);
+    }
+
+    for (let l of this.state.loggedUser.like) {
+      params.append("like", l);
+    }
+    for (let i of this.state.loggedUser.interested) {
+      params.append("interested", i);
+    }
+    for (let s of this.state.loggedUser.seen) {
+      params.append("seen", s);
+    }
+
+    fetch("http://localhost:9000/actions/user/600e99e7126abc3228851bc2/update", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params.toString(),
+    }).catch((err) => {
+      console.error(err);
+    });
   }
 
   addAnother() {
