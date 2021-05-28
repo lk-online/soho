@@ -132,7 +132,7 @@ class NewPost extends React.Component {
   }
 
   handleSubmit(e) {
-    const formData = new FormData(e.target);
+    const formData = new FormData(  );
 
     const params = new URLSearchParams();
     for (let pair of formData.entries()) {
