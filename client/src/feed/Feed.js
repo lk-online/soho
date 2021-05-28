@@ -63,9 +63,25 @@ class Feed extends React.Component {
   }
 
   handleClick(e, icon) {
-    !this.state.like.includes(e) && icon === "like" && this.state.like.push(e);
-    !this.state.interested.includes(e) && icon === "interested" && this.state.interested.push(e);
-    !this.state.seen.includes(e) && icon === "seen" && this.state.seen.push(e);
+    const like_index = this.state.like.indexOf(e);
+    const interested_index = this.state.interested.indexOf(e);
+    const seen_index = this.state.seen.indexOf(e);
+
+    switch (icon) {
+      case "like":
+        this.state.like.includes(e) ? this.state.like.splice(like_index, 1) : this.state.like.push(e);
+        break;
+      case "interested":
+        this.state.interested.includes(e)
+          ? this.state.interested.splice(interested_index, 1)
+          : this.state.interested.push(e);
+        break;
+      case "seen":
+        this.state.seen.includes(e) ? this.state.seen.splice(seen_index, 1) : this.state.seen.push(e);
+        break;
+      default:
+        break;
+    }
 
     const params = new URLSearchParams();
 
