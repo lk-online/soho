@@ -261,7 +261,7 @@ function Seen(props) {
 
 function SelfPosts(props) {
   let selfPosts =
-    props.posts.selfPosts.length !== 0 &&
+    props.posts.apiResponse.length !== 0 &&
     props.posts.selfPosts.map((i) =>
       props.posts.apiResponse
         .filter((x) => x._id === i)

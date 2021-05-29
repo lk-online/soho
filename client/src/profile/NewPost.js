@@ -132,7 +132,9 @@ class NewPost extends React.Component {
   }
 
   handleSubmit(e) {
-    const formData = new FormData();
+    const myForm = document.getElementById("newPostForm");
+
+    const formData = new FormData(myForm);
 
     const params = new URLSearchParams();
     for (let pair of formData.entries()) {

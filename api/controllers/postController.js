@@ -44,7 +44,7 @@ exports.post_create_post = [
     next();
   },
 
-  // Validate and sanitise fields.
+  // Validate and sanitize fields.
   body("tag.*").escape(),
 
   // Process request after validation and sanitization.
