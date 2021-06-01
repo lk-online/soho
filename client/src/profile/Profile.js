@@ -259,7 +259,7 @@ function Seen(props) {
   return seen;
 }
 
-function SelfPosts(props) {
+function SelfPosts(props) { 
   let selfPosts =
     props.posts.apiResponse.length !== 0 &&
     props.posts.selfPosts.map((i) =>
