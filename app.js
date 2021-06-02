@@ -9,11 +9,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var actionsRouter = require("./routes/actions"); //Import routes for "actions" area of site
 
-var helmet = require("helmet");
-
 var app = express();
-
-app.use(helmet());
 
 //Set up mongoose connection
 var mongoose = require("mongoose");
@@ -31,7 +27,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "client/build")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
