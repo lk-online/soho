@@ -1,10 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "private": true,
-  "engines": {
-    "node": "14.13.1"
-  },
+  "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
