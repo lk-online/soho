@@ -9,7 +9,7 @@ var tag_controller = require("../controllers/tagController");
 /// Post ROUTES ///
 
 // GET actions home page.
-router.get("/", post_controller.index);
+router.get("/", post_controller.post_list);
 
 // GET request for creating a Post. NOTE This must come before routes that display Post (uses id).
 router.get("/post/create", post_controller.post_create_get);
