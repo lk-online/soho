@@ -33,12 +33,15 @@
 .profile-post-images {
     display: flex;
     overflow-x: scroll;
+    height: 180px;
 }
 
 .profile-post-images img {
     margin-left: auto;
     margin-right: auto;
-    width: 25%;
+    height: 100%;
+    width: auto;
+    outline: 1px solid white;
 }
 
 .profile-posts .post:first-of-type {
