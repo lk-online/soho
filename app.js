@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "./client/build")));
 
-app.use("/", actionsRouter);
+app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/actions", actionsRouter); // Add actions routes to middleware chain.
 
