@@ -410,11 +410,11 @@ class Profile extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:9000/actions/posts")
+    fetch("https://lk-soho.herokuapp.com/actions/posts")
       .then((res) => res.json())
       .then((res) => this.setState({ apiResponse: res }));
 
-    fetch(`http://localhost:9000/actions/user/${this.state.loggedUserID}`)
+    fetch(`https://lk-soho.herokuapp.com/actions/user/${this.state.loggedUserID}`)
       .then((res) => res.json())
       .then((res) =>
         this.setState({

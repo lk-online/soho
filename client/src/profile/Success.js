@@ -11,7 +11,7 @@ class Success extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`http://localhost:9000/actions/post/${this.props.props}`)
+    fetch(`https://lk-soho.herokuapp.com/actions/post/${this.props.props}`)
       .then((res) => res.json())
       .then((res) => this.setState({ apiResponse: res }))
   }

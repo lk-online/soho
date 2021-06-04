@@ -10,7 +10,7 @@ class Post extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:9000/actions/post/:id")
+    fetch("https://lk-soho.herokuapp.com/actions/post/:id")
       .then((res) => res.json())
       .then((res) => this.setState({ apiResponse: res }))
       .then(() => console.log(this.state.apiResponse));

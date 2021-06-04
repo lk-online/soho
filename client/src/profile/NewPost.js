@@ -118,11 +118,11 @@ class NewPost extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:9000/actions/post/create")
+    fetch("https://lk-soho.herokuapp.com/actions/post/create")
       .then((res) => res.json())
       .then((res) => this.setState({ apiResponse: res, saved: false }));
 
-    fetch("http://localhost:9000/actions/user/600e99e7126abc3228851bc2")
+    fetch("https://lk-soho.herokuapp.com/actions/user/600e99e7126abc3228851bc2")
       .then((res) => res.json())
       .then((res) =>
         this.setState({
@@ -141,7 +141,7 @@ class NewPost extends React.Component {
       typeof pair[1] == "string" && params.append(pair[0], pair[1]);
     }
 
-    fetch("http://localhost:9000/actions/post/create", {
+    fetch("https://lk-soho.herokuapp.com/actions/post/create", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: params.toString(),
@@ -178,7 +178,7 @@ class NewPost extends React.Component {
       params.append("seen", s);
     }
 
-    fetch("http://localhost:9000/actions/user/600e99e7126abc3228851bc2/update", {
+    fetch("https://lk-soho.herokuapp.com/actions/user/600e99e7126abc3228851bc2/update", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: params.toString(),
