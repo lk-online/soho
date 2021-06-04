@@ -6,8 +6,15 @@ ol {
 .post {
     display: flex;
     flex-wrap: wrap;
-    margin: 18px 4px;
     justify-content: flex-start;
+}
+
+.post:first-child {
+    margin: 0 4px 18px;
+}
+
+.post:nth-child(n+2) {
+    margin: 18px 4px;
 }
 
 .post:last-of-type {
@@ -79,6 +86,6 @@ ol {
 }
 
 .state-icons input {
-    height: 18px;
-    margin: 0px 14px 0px 0px
+    height: 24px;
+    margin: 0 18px 0 0;
 }
