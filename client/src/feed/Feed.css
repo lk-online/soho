@@ -17,12 +17,14 @@ ol {
 .post-images {
     display: flex;
     overflow-x: scroll;
+    height: 125px;
 }
 
 .post-images img {
     margin-left: auto;
     margin-right: auto;
-    width: 100%;
+    height: 100%;
+    width: auto;
 }
 
 .post li {
