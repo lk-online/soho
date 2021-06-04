@@ -46,7 +46,7 @@ class Feed extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount() {
-    fetch("http://localhost:9000/actions/posts")
+    fetch("https://lk-soho.herokuapp.com//actions/posts")
       .then((res) => res.json())
       .then((res) => this.setState({ apiResponse: res }));
 
